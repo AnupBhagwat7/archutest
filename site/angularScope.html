@@ -1,0 +1,77 @@
+<html>
+
+<head>
+	
+	<title>Angular scopes</title>
+	<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+
+	<script type="text/javascript">
+		
+		var app = angular.module('myApp', [] );
+
+		app.controller("myController", function($scope){
+
+			$scope.message = "20";
+		});
+
+		app.controller("newController", function($scope, $http){
+
+			$scope.message = "Hello message new";
+
+			$http.get("http://localhost:8083/RESTfulExample/rest/json/metallica/get").then
+			(function(response){
+				$scope.countries = response.data;
+				console.log($scope.countries );
+			});
+
+		});
+
+		app.controller("httpController", function _refreshCountryData($scope, $http) {
+                    $http({
+                        method : 'GET',
+                        url : 'http://localhost:8083/RESTfulExample/rest/json/metallica/get'
+                    }).then(function successCallback(response) {
+                        $scope.tracks = response.data;
+                        console.log(response.data);
+                    }, function errorCallback(response) {
+                        console.log(response.statusText);
+                    });
+                });
+	</script>
+</head>
+
+
+<body ng-app="myApp" ng-init = 'countries = [{cname:"India", pop:"1000"} , {cname:"India", pop:"1000"},{cname:"AUS", pop:"1000"},{cname:"India", pop:"1000"},{cname:"India", pop:"1000"},{cname:"PAK", pop:"100"},{cname:"USA", pop:"5000"},{cname:"Russia", pop:"4000"}]  ' ; count =100 >
+	
+<div ng-controller="myController">
+	
+	{{message | currency}}   <label ng-bind="message">
+
+	
+	
+</div>
+
+<div ng-controller= "newController">
+		
+		{{message}}
+
+
+		<span>Countries data: {{countries}}
+
+</div>	
+
+<div ng-controller="httpController" >
+
+Enter Track name: <input type="text" ng-model="searchText"/>
+
+{{count}}
+<ol>
+<li ng-repeat="track in tracks  | filter: searchText | orderBy : 'singer' ">
+	{{track.title +'  '+ track.singer }}
+</li>
+</ol>
+</div>
+
+</body>
+</html>
+
